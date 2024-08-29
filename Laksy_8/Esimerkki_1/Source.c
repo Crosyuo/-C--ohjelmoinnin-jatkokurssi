@@ -28,7 +28,7 @@ int main()
     }
   t2 = clock();
   printf("%.1fs\n", (t2 - t1) / (float)CLOCKS_PER_SEC);
-  printf("Kuinka paljon enemmän muistia optimoitu versio kuluttaa: (Double = 8 bytes) 360 * 8 bytes = 2880 bytes enemmän\n");
+  printf("Kuinka paljon enemmän muistia optimoitu versio kuluttaa: (Double = 8 bytes) 360 * 8 bytes = 2880 bytea tai 2.88 KB enemmän. Muisti tallennetaan stackiin.\n");
   printf("Kuinka paljon nopeammin optimoitu versio toimii: Noin 10 kertaa nopeammin, (original: 6,1-6,2 sec / optimized: 0,6 sec)\n");
 
   return 0;
