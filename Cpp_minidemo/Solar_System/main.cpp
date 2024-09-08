@@ -1,28 +1,31 @@
 #include <iostream>
 #include <SDL.h>
 #include <cmath>
+#include <memory>
+#include <array>
 
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1080;
+constexpr int SCREEN_WIDTH = 1920;
+constexpr int SCREEN_HEIGHT = 1080;
 
 struct Planet {
     SDL_Rect rect;
     double orbitRadius;
     double orbitSpeed;
     double angle;
-    SDL_Texture* const texture;
+    std::shared_ptr<SDL_Texture> texture;
+    int halfW, halfH;
 
-    Planet(int w, int h, double orbitRadius, double orbitSpeed, double angle, SDL_Texture* texture)
-        : rect{ 0, 0, w, h }, orbitRadius(orbitRadius), orbitSpeed(orbitSpeed), angle(angle), texture(texture) {}
+    Planet(int w, int h, double orbitRadius, double orbitSpeed, double angle, std::shared_ptr<SDL_Texture> texture)
+        : rect{ 0, 0, w, h }, orbitRadius(orbitRadius), orbitSpeed(orbitSpeed), angle(angle), texture(texture), halfW(w / 2), halfH(h / 2) {}
 
     void updatePosition(int sunX, int sunY) {
-        rect.x = sunX + static_cast<int>(orbitRadius * cos(angle)) - rect.w / 2;
-        rect.y = sunY + static_cast<int>(orbitRadius * sin(angle)) - rect.h / 2;
+        rect.x = sunX + static_cast<int>(orbitRadius * cos(angle)) - halfW;
+        rect.y = sunY + static_cast<int>(orbitRadius * sin(angle)) - halfH;
         angle += orbitSpeed;
     }
 
     void render(SDL_Renderer* renderer) {
-        SDL_RenderCopy(renderer, texture, NULL, &rect);
+        SDL_RenderCopy(renderer, texture.get(), NULL, &rect);
     }
 };
 
@@ -30,56 +33,39 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = nullptr;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cout << "SDL could not be initialized: " << SDL_GetError();
+        std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
         return -1;
     }
     else {
-        std::cout << "SDL video system is ready to go\n";
+        std::cout << "SDL video system initialized\n";
     }
 
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     window = SDL_CreateWindow("C++ SDL2 Window", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_BORDERLESS);
-
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    SDL_Surface* surfaceStars = SDL_LoadBMP("./images/stars.bmp");
-    SDL_Surface* surfaceSun = SDL_LoadBMP("./images/sun.bmp");
-    SDL_Surface* surfaceMercury = SDL_LoadBMP("./images/mercury.bmp");
-    SDL_Surface* surfaceVenus = SDL_LoadBMP("./images/venus.bmp");
-    SDL_Surface* surfaceEarth = SDL_LoadBMP("./images/earth.bmp");
-    SDL_Surface* surfaceMars = SDL_LoadBMP("./images/mars.bmp");
-    SDL_Surface* surfaceJupiter = SDL_LoadBMP("./images/jupiter.bmp");
-    SDL_Surface* surfaceSaturn = SDL_LoadBMP("./images/saturn.bmp");
-    SDL_Surface* surfaceUranus = SDL_LoadBMP("./images/uranus.bmp");
-    SDL_Surface* surfaceNeptune = SDL_LoadBMP("./images/neptune.bmp");
+    auto textureStars = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/stars.bmp")), SDL_DestroyTexture);
+    auto textureSun = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/sun.bmp")), SDL_DestroyTexture);
+    auto textureMercury = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/mercury.bmp")), SDL_DestroyTexture);
+    auto textureVenus = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/venus.bmp")), SDL_DestroyTexture);
+    auto textureEarth = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/earth.bmp")), SDL_DestroyTexture);
+    auto textureMars = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/mars.bmp")), SDL_DestroyTexture);
+    auto textureJupiter = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/jupiter.bmp")), SDL_DestroyTexture);
+    auto textureSaturn = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/saturn.bmp")), SDL_DestroyTexture);
+    auto textureUranus = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/uranus.bmp")), SDL_DestroyTexture);
+    auto textureNeptune = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./images/neptune.bmp")), SDL_DestroyTexture);
 
-    SDL_Texture* textureStars = SDL_CreateTextureFromSurface(renderer, surfaceStars);
-    SDL_Texture* textureSun = SDL_CreateTextureFromSurface(renderer, surfaceSun);
-    SDL_Texture* textureMercury = SDL_CreateTextureFromSurface(renderer, surfaceMercury);
-    SDL_Texture* textureVenus = SDL_CreateTextureFromSurface(renderer, surfaceVenus);
-    SDL_Texture* textureEarth = SDL_CreateTextureFromSurface(renderer, surfaceEarth);
-    SDL_Texture* textureMars = SDL_CreateTextureFromSurface(renderer, surfaceMars);
-    SDL_Texture* textureJupiter = SDL_CreateTextureFromSurface(renderer, surfaceJupiter);
-    SDL_Texture* textureSaturn = SDL_CreateTextureFromSurface(renderer, surfaceSaturn);
-    SDL_Texture* textureUranus = SDL_CreateTextureFromSurface(renderer, surfaceUranus);
-    SDL_Texture* textureNeptune = SDL_CreateTextureFromSurface(renderer, surfaceNeptune);
-
-    SDL_FreeSurface(surfaceStars);
-    SDL_FreeSurface(surfaceSun);
-    SDL_FreeSurface(surfaceMercury);
-    SDL_FreeSurface(surfaceVenus);
-    SDL_FreeSurface(surfaceEarth);
-    SDL_FreeSurface(surfaceMars);
-    SDL_FreeSurface(surfaceJupiter);
-    SDL_FreeSurface(surfaceSaturn);
-    SDL_FreeSurface(surfaceUranus);
-    SDL_FreeSurface(surfaceNeptune);
+    if (!textureStars || !textureSun || !textureMercury || !textureVenus || !textureEarth ||
+        !textureMars || !textureJupiter || !textureSaturn || !textureUranus || !textureNeptune) {
+        std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
+        return -1;
+    }
 
     SDL_Rect sunRect = { (SCREEN_WIDTH - 100) / 2, (SCREEN_HEIGHT - 100) / 2, 100, 100 };
-
     SDL_Rect backgroundRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
-    int sunXCoordinate = sunRect.x + sunRect.w / 2;
-    int sunYCoordinate = sunRect.y + sunRect.h / 2;
+    const int sunXCoordinate = sunRect.x + sunRect.w / 2;
+    const int sunYCoordinate = sunRect.y + sunRect.h / 2;
 
     Planet mercury = { 30, 30, 80.0, 0.02 * 4.15, 45.0, textureMercury };
     Planet venus = { 40, 40, 125.0, 0.02 * 1.62, 90.0, textureVenus };
@@ -90,7 +76,7 @@ int main(int argc, char* argv[]) {
     Planet uranus = { 60, 60, 470.0, 0.02 * 0.012, 315.0, textureUranus };
     Planet neptune = { 60, 60, 550.0, 0.02 * 0.006, 0.0, textureNeptune };
 
-    Planet planets[] = { mercury, venus, earth, mars, jupiter, saturn, uranus, neptune };
+    std::array<Planet, 8> planets = { mercury, venus, earth, mars, jupiter, saturn, uranus, neptune };
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
@@ -111,8 +97,8 @@ int main(int argc, char* argv[]) {
 
         SDL_RenderClear(renderer);
 
-        SDL_RenderCopy(renderer, textureStars, NULL, &backgroundRect);
-        SDL_RenderCopy(renderer, textureSun, NULL, &sunRect);
+        SDL_RenderCopy(renderer, textureStars.get(), NULL, &backgroundRect);
+        SDL_RenderCopy(renderer, textureSun.get(), NULL, &sunRect);
 
         for (Planet& planet : planets) {
             planet.updatePosition(sunXCoordinate, sunYCoordinate);
@@ -120,19 +106,9 @@ int main(int argc, char* argv[]) {
         }
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);  // ~60 FPS
+        SDL_Delay(16);
     }
 
-    SDL_DestroyTexture(textureStars);
-    SDL_DestroyTexture(textureSun);
-    SDL_DestroyTexture(textureMercury);
-    SDL_DestroyTexture(textureVenus);
-    SDL_DestroyTexture(textureEarth);
-    SDL_DestroyTexture(textureMars);
-    SDL_DestroyTexture(textureJupiter);
-    SDL_DestroyTexture(textureSaturn);
-    SDL_DestroyTexture(textureUranus);
-    SDL_DestroyTexture(textureNeptune);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
