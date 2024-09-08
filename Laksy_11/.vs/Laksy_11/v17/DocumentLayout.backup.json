@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\crist\\Documents\\GitHub\\-C--ohjelmoinnin-jatkokurssi\\Laksy_11\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{026AE94E-B464-465A-A4A6-FA79D221BB8B}|Kirjastojen_kayttoonotto\\Kirjastojen_kayttoonotto.vcxproj|C:\\Users\\crist\\Documents\\GitHub\\-C--ohjelmoinnin-jatkokurssi\\Laksy_11\\Kirjastojen_kayttoonotto\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{026AE94E-B464-465A-A4A6-FA79D221BB8B}|Kirjastojen_kayttoonotto\\Kirjastojen_kayttoonotto.vcxproj|solutionrelative:Kirjastojen_kayttoonotto\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 254,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\crist\\Documents\\GitHub\\-C--ohjelmoinnin-jatkokurssi\\Laksy_11\\Kirjastojen_kayttoonotto\\main.cpp",
+              "RelativeDocumentMoniker": "Kirjastojen_kayttoonotto\\main.cpp",
+              "ToolTip": "C:\\Users\\crist\\Documents\\GitHub\\-C--ohjelmoinnin-jatkokurssi\\Laksy_11\\Kirjastojen_kayttoonotto\\main.cpp",
+              "RelativeToolTip": "Kirjastojen_kayttoonotto\\main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-06T07:54:24.904Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

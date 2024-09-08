@@ -1,0 +1,2 @@
+C:\Users\crist\Documents\GitHub\-C--ohjelmoinnin-jatkokurssi\Laksy_10\x64\Debug\Teht_2.exe.lastcodeanalysissucceeded
+C:\Users\crist\Documents\GitHub\-C--ohjelmoinnin-jatkokurssi\Laksy_10\Teht_2\x64\Debug\NativeCodeAnalysis.read.1.tlog
