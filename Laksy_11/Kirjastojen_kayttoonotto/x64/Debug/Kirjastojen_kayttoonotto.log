@@ -1,2 +1,4 @@
 ﻿  main.cpp
+C:\Users\crist\Documents\GitHub\-C--ohjelmoinnin-jatkokurssi\Laksy_11\Kirjastojen_kayttoonotto\main.cpp(73,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\crist\Documents\GitHub\-C--ohjelmoinnin-jatkokurssi\Laksy_11\Kirjastojen_kayttoonotto\main.cpp(74,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Kirjastojen_kayttoonotto.vcxproj -> C:\Users\crist\Documents\GitHub\-C--ohjelmoinnin-jatkokurssi\Laksy_11\x64\Debug\Kirjastojen_kayttoonotto.exe
