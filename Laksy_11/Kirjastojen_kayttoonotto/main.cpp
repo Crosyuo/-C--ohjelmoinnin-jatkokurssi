@@ -81,6 +81,7 @@ int main(int argc, char** argv) {
         SDL_Delay(16);
     }
 
+
     SDL_DestroyTexture(boxTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
