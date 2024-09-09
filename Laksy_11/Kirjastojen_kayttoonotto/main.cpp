@@ -5,6 +5,7 @@
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
+//main
 int main(int argc, char** argv) {
     SDL_Window* window = nullptr;
 
