@@ -1,34 +1,74 @@
+/**
+ * @file
+ * @brief A file that demonstrates a simple solar system simulation using SDL2.
+ *
+ * This file creates a graphical representation of a solar system with planets orbiting the sun.
+ * The solar system is rendered using SDL2 and textures are loaded from BMP files.
+ */
+
 #include <iostream>
 #include <SDL.h>
 #include <cmath>
 #include <memory>
 #include <array>
 
-constexpr int SCREEN_WIDTH = 1920;
-constexpr int SCREEN_HEIGHT = 1080;
+constexpr int SCREEN_WIDTH = 1920; ///< The width of the window.
+constexpr int SCREEN_HEIGHT = 1080; ///< The height of the window.
 
+/**
+ * @struct Planet
+ * @brief Represents a planet in the solar system.
+ *
+ * The Planet struct holds information about a planet's position, orbit, and texture.
+ */
 struct Planet {
-    SDL_Rect rect;
-    double orbitRadius;
-    double orbitSpeed;
-    double angle;
-    std::shared_ptr<SDL_Texture> texture;
-    int halfW, halfH;
+    SDL_Rect rect; ///< The rectangle defining the position and size of the planet.
+    double orbitRadius; ///< The radius of the planet's orbit around the sun.
+    double orbitSpeed; ///< The speed at which the planet orbits the sun.
+    double angle; ///< The current angle of the planet in its orbit.
+    std::shared_ptr<SDL_Texture> texture; ///< The texture representing the planet.
+    int halfW; ///< Half of the planet's width, used for positioning.
+    int halfH; ///< Half of the planet's height, used for positioning.
 
+    /**
+     * @brief Constructs a Planet object.
+     * @param w Width of the planet's texture.
+     * @param h Height of the planet's texture.
+     * @param orbitRadius The radius of the planet's orbit.
+     * @param orbitSpeed The speed of the planet's orbit.
+     * @param angle The initial angle of the planet.
+     * @param texture The texture of the planet.
+     */
     Planet(int w, int h, double orbitRadius, double orbitSpeed, double angle, std::shared_ptr<SDL_Texture> texture)
         : rect{ 0, 0, w, h }, orbitRadius(orbitRadius), orbitSpeed(orbitSpeed), angle(angle), texture(texture), halfW(w / 2), halfH(h / 2) {}
 
+    /**
+     * @brief Updates the position of the planet based on its orbit.
+     * @param sunX The x-coordinate of the sun's center.
+     * @param sunY The y-coordinate of the sun's center.
+     */
     void updatePosition(int sunX, int sunY) {
         rect.x = sunX + static_cast<int>(orbitRadius * cos(angle)) - halfW;
         rect.y = sunY + static_cast<int>(orbitRadius * sin(angle)) - halfH;
         angle += orbitSpeed;
     }
 
+    /**
+     * @brief Renders the planet to the screen.
+     * @param renderer The SDL_Renderer used for rendering.
+     */
     void render(SDL_Renderer* renderer) {
         SDL_RenderCopy(renderer, texture.get(), NULL, &rect);
     }
 };
 
+/**
+ * @brief Main function for the solar system simulation.
+ *
+ * Initializes SDL, loads textures, and enters the main loop where the solar system is rendered and updated.
+ * The loop continues until the user closes the window or presses the escape key.
+ * @return Exit status.
+ */
 int main(int argc, char* argv[]) {
     SDL_Window* window = nullptr;
 
@@ -40,7 +80,7 @@ int main(int argc, char* argv[]) {
         std::cout << "SDL video system initialized\n";
     }
 
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"); ///< Set rendering scale quality to linear for better texture quality.
     window = SDL_CreateWindow("C++ SDL2 Window", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_BORDERLESS);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -61,11 +101,11 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    SDL_Rect sunRect = { (SCREEN_WIDTH - 100) / 2, (SCREEN_HEIGHT - 100) / 2, 100, 100 };
-    SDL_Rect backgroundRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_Rect sunRect = { (SCREEN_WIDTH - 100) / 2, (SCREEN_HEIGHT - 100) / 2, 100, 100 }; ///< The rectangle defining the position and size of the sun.
+    SDL_Rect backgroundRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT }; ///< The rectangle defining the background.
 
-    const int sunXCoordinate = sunRect.x + sunRect.w / 2;
-    const int sunYCoordinate = sunRect.y + sunRect.h / 2;
+    const int sunXCoordinate = sunRect.x + sunRect.w / 2; ///< The x-coordinate of the sun's center calcualted outside of the loop.
+    const int sunYCoordinate = sunRect.y + sunRect.h / 2; ///< The y-coordinate of the sun's center calcualted outside of the loop.
 
     Planet mercury = { 30, 30, 80.0, 0.02 * 4.15, 45.0, textureMercury };
     Planet venus = { 40, 40, 125.0, 0.02 * 1.62, 90.0, textureVenus };
@@ -78,7 +118,7 @@ int main(int argc, char* argv[]) {
 
     std::array<Planet, 8> planets = { mercury, venus, earth, mars, jupiter, saturn, uranus, neptune };
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); ///< Set the draw color to black.
 
     bool running = true;
     while (running) {
@@ -106,10 +146,10 @@ int main(int argc, char* argv[]) {
         }
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
+        SDL_Delay(16); ///< Delay to achieve a frame rate of approximately 60 FPS.
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    SDL_DestroyWindow(window); ///< Clean up resources and close the window.
+    SDL_Quit(); ///< Quit SDL.
     return 0;
 }
